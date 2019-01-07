@@ -17,7 +17,7 @@ module.exports = {
                 stream.on('data', function (data) {
                     let event = data.event;
                     if (event) {
-                        stream.emit(event, data.data);
+                        stream.emit(event, JSON.parse(data.data));
                     }
                 });
                 self.connections.push(stream);

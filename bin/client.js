@@ -35,3 +35,10 @@ channel.write({
         message: ')))'
     })
 });
+channel.write({
+    event: 'message',
+    data: JSON.stringify({
+        channel: '))',
+        message: ')))'
+    })
+});

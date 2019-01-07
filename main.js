@@ -13,8 +13,13 @@ module.exports = {
         self.connections = [];
         grpcServer.addService(protocol.events.Stream.service, {
             connect: function (stream) {
-                // TODO: Обернуть поток функциональностью, которая разворачивает приходящие данные в события
-                // TODO: Поддержать события set / get / subscribe / publish
+                // Разворачиваем приходящие данные в события
+                stream.on('data', function (data) {
+                    let event = data.event;
+                    if (event) {
+                        stream.emit(event, data.data);
+                    }
+                });
                 self.connections.push(stream);
                 self.emit('connection', stream);
             }

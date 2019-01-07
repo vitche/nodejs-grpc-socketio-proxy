@@ -10,6 +10,28 @@ channel.on('data', function (data) {
     console.log(data);
 });
 channel.write({
-    event: '))',
-    data: ')))'
+    event: 'get',
+    data: JSON.stringify({
+        key: '))'
+    })
+});
+channel.write({
+    event: 'set',
+    data: JSON.stringify({
+        key: '))',
+        value: ')))'
+    })
+});
+channel.write({
+    event: 'subscribe',
+    data: JSON.stringify({
+        channel: '))'
+    })
+});
+channel.write({
+    event: 'publish',
+    data: JSON.stringify({
+        channel: '))',
+        message: ')))'
+    })
 });

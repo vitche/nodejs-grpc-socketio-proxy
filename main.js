@@ -7,17 +7,35 @@ const grpcServer = new grpc.Server();
 const protocol = grpc.loadPackageDefinition(protocolLoader.loadSync('events.proto'), {});
 
 module.exports = {
-    ClientSocket: {},
+    ClientSocket: {
+        connect: function (uri, configuration) {
+            let client = new protocol.events.Stream(
+                uri,
+                grpc.credentials.createInsecure()
+            );
+            let stream = client.connect();
+            stream._emit = stream.emit;
+            // Разворачиваем приходящие данные в события
+            stream.on('data', function (data) {
+                let event = data.event;
+                if (event) {
+                    stream._emit(event, JSON.parse(data.data));
+                }
+            });
+            return stream;
+        }
+    },
     ServerSocket: function (server) {
         let self = new EventEmitter();
         self.connections = [];
         grpcServer.addService(protocol.events.Stream.service, {
             connect: function (stream) {
+                stream._emit = stream.emit;
                 // Разворачиваем приходящие данные в события
                 stream.on('data', function (data) {
                     let event = data.event;
                     if (event) {
-                        stream.emit(event, JSON.parse(data.data));
+                        stream._emit(event, JSON.parse(data.data));
                     }
                 });
                 self.connections.push(stream);

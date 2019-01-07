@@ -18,7 +18,7 @@ module.exports = {
             stream.emit = function (event, data) {
                 stream.write({
                     event: event,
-                    data: data
+                    data: JSON.stringify(data)
                 });
             };
             // Разворачиваем приходящие данные в события

@@ -1,19 +1,19 @@
 let clientSocket = require('../main').ClientSocket.connect('0.0.0.0:5001', {});
-clientSocket.emit('get', JSON.stringify({
+clientSocket.emit('get', {
     key: '))'
-}));
-clientSocket.emit('set', JSON.stringify({
+});
+clientSocket.emit('set', {
     key: '))',
     value: ')))'
-}));
-clientSocket.emit('subscribe', JSON.stringify({
+});
+clientSocket.emit('subscribe', {
     channel: '))'
-}));
-clientSocket.emit('publish', JSON.stringify({
+});
+clientSocket.emit('publish', {
     channel: '))',
     message: ')))'
-}));
-clientSocket.emit('message', JSON.stringify({
+});
+clientSocket.emit('message', {
     channel: '))',
     message: ')))'
-}));
+});

@@ -37,6 +37,12 @@ module.exports = {
         grpcServer.addService(protocol.events.Stream.service, {
             connect: function (stream) {
                 stream._emit = stream.emit;
+                stream.emit = function (event, data) {
+                    stream.write({
+                        event: event,
+                        data: JSON.stringify(data)
+                    });
+                };
                 // Разворачиваем приходящие данные в события
                 stream.on('data', function (data) {
                     let event = data.event;

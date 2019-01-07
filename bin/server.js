@@ -9,9 +9,6 @@ let server = {
 let serverSocket = require('../main').ServerSocket(server);
 serverSocket.on('connection', function (connection) {
     console.log('Accepted new connection');
-    connection.on('message', function (data) {
-        console.log('Data:', data);
-    });
     connection.on('data', function (data) {
         console.log('Data:', data);
     });
@@ -25,6 +22,9 @@ serverSocket.on('connection', function (connection) {
         console.log('Data:', data);
     });
     connection.on('publish', function (data) {
+        console.log('Data:', data);
+    });
+    connection.on('message', function (data) {
         console.log('Data:', data);
     });
 });

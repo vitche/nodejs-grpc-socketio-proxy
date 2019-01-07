@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "handshake": "node ./bin/handshake",
     "client": "node ./bin/client",
     "server": "node ./bin/server"
   },

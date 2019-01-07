@@ -15,6 +15,12 @@ module.exports = {
             );
             let stream = client.connect();
             stream._emit = stream.emit;
+            stream.emit = function (event, data) {
+                stream.write({
+                    event: event,
+                    data: data
+                });
+            };
             // Разворачиваем приходящие данные в события
             stream.on('data', function (data) {
                 let event = data.event;

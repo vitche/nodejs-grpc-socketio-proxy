@@ -1,17 +1,15 @@
-var grpc = require('grpc');
-var protocolLoader = require('@grpc/proto-loader');
-const server = new grpc.Server();
-var protocol = grpc.loadPackageDefinition(protocolLoader.loadSync('../events.proto'), {
+let server = {
+    address: function () {
+        return {
+            address: '0.0.0.0',
+            port: 5001
+        }
+    }
+};
+let serverSocket = require('../main').ServerSocket(server);
+serverSocket.on('connection', function (connection) {
+    console.log('Accepted new connection');
+    connection.on('data', function (data) {
+        console.log('Data:', data);
+    });
 });
-
-function on(call, callback) {
-
-}
-
-function emit(call, callback) {
-
-}
-
-server.addService(protocol.events.Stream.service, { on: on, emit: emit});
-server.bind("0.0.0.0:5001", grpc.ServerCredentials.createInsecure());
-server.start();

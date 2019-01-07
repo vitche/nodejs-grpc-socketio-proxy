@@ -3,8 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "client": "node ./bin/client",
+    "server": "node ./bin/server"
   },
+  "main": "main.js",
   "dependencies": {
     "@grpc/proto-loader": "^0.3.0",
     "grpc": "^1.17.0"

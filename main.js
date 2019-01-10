@@ -4,7 +4,7 @@ let protocolLoader = require('@grpc/proto-loader');
 const EventEmitter = require('events');
 
 const grpcServer = new grpc.Server();
-const protocol = grpc.loadPackageDefinition(protocolLoader.loadSync('events.proto'), {});
+const protocol = grpc.loadPackageDefinition(protocolLoader.loadSync(__dirname + '/events.proto'), {});
 
 module.exports = {
     ClientSocket: {

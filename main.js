@@ -33,6 +33,9 @@ module.exports = {
                     stream._emit(event, JSON.parse(data.data));
                 }
             });
+            stream.disconnect = function () {
+                this.cancel();
+            };
             return stream;
         }
     },

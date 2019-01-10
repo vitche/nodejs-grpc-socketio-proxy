@@ -22,6 +22,7 @@ serverSocket.on('connection', function (connection) {
 clientSocket = require('../main').ClientSocket.connect('0.0.0.0:5001', {});
 clientSocket.on('publish', function (data) {
     console.log(data);
+    clientSocket.disconnect();
 });
 clientSocket.emit('publish', {
     channel: "))",

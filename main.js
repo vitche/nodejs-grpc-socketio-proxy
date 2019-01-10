@@ -18,7 +18,7 @@ module.exports = {
             stream.emit = function (event, data) {
                 // События "resume" и "metadata" происходят внутри библиотеки и мы их должны пропустить.
                 // Также мы не можем посылать собственные события с такими названиеми.
-                if ('resume' == event || 'metadata' == event) {
+                if ('resume' == event || 'metadata' == event || 'data' == event) {
                     return stream._emit(event, data);
                 }
                 stream.write({
@@ -42,15 +42,17 @@ module.exports = {
         grpcServer.addService(protocol.events.Stream.service, {
             connect: function (stream) {
                 stream._emit = stream.emit;
-                // TODO: Дать возможность серверу посылать события
-                /*
                 stream.emit = function (event, data) {
+                    // События "resume" и "metadata" происходят внутри библиотеки и мы их должны пропустить.
+                    // Также мы не можем посылать собственные события с такими названиеми.
+                    if ('resume' == event || 'metadata' == event || 'data' == event) {
+                        return stream._emit(event, data);
+                    }
                     stream.write({
                         event: event,
                         data: JSON.stringify(data)
                     });
                 };
-                */
                 // Разворачиваем приходящие данные в события
                 stream.on('data', function (data) {
                     let event = data.event;

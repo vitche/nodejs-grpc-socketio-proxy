@@ -31,6 +31,23 @@ clientSocket.emit('ping', {
 });
 ```
 
+# Attaching GRPC-based Web-socket to an existing Express.js server
+
+GRPC needs to open an own TCP/IP port for accepting connections.
+But to be consistent at the level of interfaces, we enable opening the server
+based on the existing Express.js instance.
+
+The server address is taken from an existing Express.js instance and the port is taken too, but incremented by one.
+
+
+```javascript
+var grpcSocketIoProxy = require('nodejs-grpc-socketio-proxy');
+var grpcWebSocketServer = grpcSocketIoProxy.ServerSocket(expressServer);
+grpcWebSocketServer.on('connection', function (connection) {
+    console.log("Accepted GRPC WebSocket connection");
+});
+```
+
 # OnionRedis example of using Socket.io
 This example is given to describe which Socket.io interfaces must be implemented to provide a working Socket.io replacement for the OnionRedis project.
 

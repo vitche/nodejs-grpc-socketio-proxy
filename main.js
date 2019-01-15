@@ -7,6 +7,20 @@ const grpcServer = new grpc.Server();
 const protocol = grpc.loadPackageDefinition(protocolLoader.loadSync(__dirname + '/events.proto'), {});
 
 module.exports = {
+    ExpressServerProxy: function (server) {
+        let address = server.address().address;
+        if ('::' === address) {
+            address = '0.0.0.0';
+        }
+        let port = server.address().port;
+        port++;
+        this.address = function () {
+            return {
+                address: address,
+                port: port
+            }
+        };
+    },
     ClientSocket: {
         connect: function (uri, configuration) {
             let client = new protocol.events.Stream(

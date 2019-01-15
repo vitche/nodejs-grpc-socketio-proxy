@@ -44,7 +44,12 @@ module.exports = {
             stream.on('data', function (data) {
                 let event = data.event;
                 if (event) {
-                    stream._emit(event, JSON.parse(data.data));
+                    let payload = data.data;
+                    if (payload) {
+                        // TODO: This may crash in some cases
+                        payload = JSON.parse(payload);
+                    }
+                    stream._emit(event, payload);
                 }
             });
             stream.disconnect = function () {

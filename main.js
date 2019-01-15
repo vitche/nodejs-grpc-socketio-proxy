@@ -54,6 +54,9 @@ module.exports = {
         }
     },
     ServerSocket: function (server) {
+        if ('Server' === server.constructor.name) {
+            server = new this.ExpressServerProxy(server);
+        }
         let self = new EventEmitter();
         self.connections = [];
         grpcServer.addService(protocol.events.Stream.service, {

@@ -32,7 +32,7 @@ module.exports = {
             stream.emit = function (event, data) {
                 // События "resume" и "metadata" происходят внутри библиотеки и мы их должны пропустить.
                 // Также мы не можем посылать собственные события с такими названиеми.
-                if ('resume' == event || 'metadata' == event || 'data' == event) {
+                if ('resume' === event || 'metadata' === event || 'data' === event) {
                     return stream._emit(event, data);
                 }
                 stream.write({
@@ -55,6 +55,10 @@ module.exports = {
             stream.disconnect = function () {
                 this.cancel();
             };
+            // Сигнализировать о соединении на следующем шаге выполнения
+            setTimeout(function () {
+                stream._emit('connection', stream);
+            }, 0);
             return stream;
         }
     },
@@ -70,7 +74,7 @@ module.exports = {
                 stream.emit = function (event, data) {
                     // События "resume" и "metadata" происходят внутри библиотеки и мы их должны пропустить.
                     // Также мы не можем посылать собственные события с такими названиеми.
-                    if ('resume' == event || 'metadata' == event || 'data' == event) {
+                    if ('resume' === event || 'metadata' === event || 'data' === event) {
                         return stream._emit(event, data);
                     }
                     stream.write({

@@ -57,7 +57,7 @@ module.exports = {
             };
             // Сигнализировать о соединении на следующем шаге выполнения
             setTimeout(function () {
-                stream._emit('connection', stream);
+                stream._emit('connect', stream);
             }, 0);
             return stream;
         }

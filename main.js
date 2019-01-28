@@ -36,11 +36,14 @@ module.exports = {
                     // При этом, часто мы сами можем хотеть создавать такое событие.
                     // Пробуем обработать это событие сразу двумя способами.
                     stream._emit(event, data);
-                } else if ('resume' === event || 'metadata' === event) {
+                } else if ('resume' === event ||
+                    'metadata' === event ||
+                    'readable' === event ||
+                    'end' === event ||
+                    'cancelled' === event) {
                     // События "resume" и "metadata" происходят внутри библиотеки и мы их должны пропустить.
                     // Также мы не можем посылать собственные события с такими названиеми.
-                    stream._emit(event, data);
-                    return;
+                    return stream._emit(event, data);
                 }
                 stream.write({
                     event: event,
@@ -79,10 +82,24 @@ module.exports = {
             connect: function (stream) {
                 stream._emit = stream.emit;
                 stream.emit = function (event, data) {
-                    // События "resume" и "metadata" происходят внутри библиотеки и мы их должны пропустить.
-                    // Также мы не можем посылать собственные события с такими названиеми.
-                    if ('resume' === event || 'metadata' === event || 'data' === event) {
+                    if ('data' === event) {
+                        // Событие "data" внутри библиотеки происходит крайне редко, при высокой нагрузке на сервер, и содержит
+                        // какую-то информацию о сбросе буффера.
+                        // При этом, часто мы сами можем хотеть создавать такое событие.
+                        // Пробуем обработать это событие сразу двумя способами.
+                        stream._emit(event, data);
+                    } else if ('resume' === event ||
+                        'metadata' === event ||
+                        'readable' === event ||
+                        'end' == event ||
+                        'cancelled' === event) {
+                        // События "resume" и "metadata" происходят внутри библиотеки и мы их должны пропустить.
+                        // Также мы не можем посылать собственные события с такими названиеми.
                         return stream._emit(event, data);
+                    }
+                    if ('data' === event || data.event) {
+                        // Запрещаем повторное оборачивание события
+                        return;
                     }
                     stream.write({
                         event: event,

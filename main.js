@@ -97,14 +97,15 @@ module.exports = {
                         // Также мы не можем посылать собственные события с такими названиеми.
                         return stream._emit(event, data);
                     }
-                    if ('data' === event || data.event) {
+                    if ('data' === event && data.event) {
                         // Запрещаем повторное оборачивание события
                         return;
+                    } else {
+                        stream.write({
+                            event: event,
+                            data: JSON.stringify(data)
+                        });
                     }
-                    stream.write({
-                        event: event,
-                        data: JSON.stringify(data)
-                    });
                 };
                 // Разворачиваем приходящие данные в события
                 stream.on('data', function (data) {

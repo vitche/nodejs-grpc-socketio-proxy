@@ -110,12 +110,16 @@ module.exports = {
 				// Разворачиваем приходящие данные в события
 				stream.on('data', function (data) {
 					let event = data.event;
-					// TODO: Handle the "drain" event with no data
 					if (event) {
-						if (!data.data) {
-							console.log('Corrupt data detected:', data);
+						let eventArguments = undefined;
+						if (data.data) {
+							try {
+								eventArguments = JSON.parse(data.data);
+							} catch {
+								eventArguments = data.data;
+							}
 						}
-						stream._emit(event, JSON.parse(data.data));
+						stream._emit(event, eventArguments);
 					}
 				});
 				self.connections.push(stream);

@@ -91,7 +91,7 @@ module.exports = {
 					} else if ('resume' === event ||
 						'metadata' === event ||
 						'readable' === event ||
-						'end' == event ||
+						'end' === event ||
 						'cancelled' === event) {
 						// События "resume" и "metadata" происходят внутри библиотеки и мы их должны пропустить.
 						// Также мы не можем посылать собственные события с такими названиеми.
@@ -110,6 +110,7 @@ module.exports = {
 				// Разворачиваем приходящие данные в события
 				stream.on('data', function (data) {
 					let event = data.event;
+					// TODO: Handle the "drain" event with no data
 					if (event) {
 						if (!data.data) {
 							console.log('Corrupt data detected:', data);
